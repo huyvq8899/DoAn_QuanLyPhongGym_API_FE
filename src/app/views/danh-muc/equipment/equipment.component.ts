@@ -3,17 +3,16 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { PagingParams } from 'src/app/models/PagingParams';
-import { CardtypeService } from 'src/app/services/cardtype.service';
+import { EquipmentService } from 'src/app/services/equipment.service';
 import { SearchEngine } from 'src/app/shared/searchEngine';
-import { AddEditCardTypeComponent } from './add-edit-card-type/add-edit-card-type/add-edit-card-type.component';
+import { AddEditEquipmentComponent } from './add-edit-equipment/add-edit-equipment/add-edit-equipment.component';
 
 @Component({
-  selector: 'app-card-type',
-  templateUrl: './card-type.component.html',
-  styleUrls: ['./card-type.component.scss']
+  selector: 'app-equipment',
+  templateUrl: './equipment.component.html',
+  styleUrls: ['./equipment.component.scss']
 })
-export class CardTypeComponent implements OnInit {
-
+export class EquipmentComponent implements OnInit {
   displayData: PagingParams = {
     PageNumber: 1,
     PageSize: 10,
@@ -25,31 +24,31 @@ export class CardTypeComponent implements OnInit {
     KeywordCol: "",
     ColName: "",
   };
-  listCardType: any[] = [];
-  listCardTypeAll: any[] = [];
+  listEquipment: any[] = [];
+  listEquipmentAll: any[] = [];
   loading: boolean;
   spinning: boolean;
   valueModel = "";
   constructor(
-    private cardTypeService: CardtypeService,
+    private equipmentService: EquipmentService,
     private modal: NzModalService,
-    private _message: NzMessageService
+    private message: NzMessageService
   ) {}
-
+  
   ngOnInit() {
     this.LoadData();
   }
   LoadData() {
     this.loading = true;
-    this.cardTypeService.getAllCardType().subscribe((rs: any) => {
+    this.equipmentService.getAllEquipment().subscribe((rs: any) => {
       this.loading = false;
-      this.listCardType = rs;
-      this.listCardTypeAll = rs;
+      this.listEquipment = rs;
+      this.listEquipmentAll = rs;
     });
   }
   changeSearch(event: any) {
-    const arrCondition = ["cardTypeName", "cardTypeCode"];
-    this.listCardType = SearchEngine(this.listCardTypeAll, arrCondition, event);
+    const arrCondition = ["name", "amount","userId","description","createdDate"];
+    this.listEquipment = SearchEngine(this.listEquipmentAll, arrCondition, event);
   }
   @HostListener("document:keydown", ["$event"])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -60,8 +59,8 @@ export class CardTypeComponent implements OnInit {
   }
   addNewItem() {
     const modal = this.modal.create({
-      nzTitle: "Thêm loại thẻ",
-      nzContent: AddEditCardTypeComponent,
+      nzTitle: "Thêm trang thiết bị",
+      nzContent: AddEditEquipmentComponent,
       nzClosable: false,
       nzFooter: "null",
       nzWidth: "35%",
@@ -69,7 +68,7 @@ export class CardTypeComponent implements OnInit {
         top: "30px",
       },
       nzComponentParams: {
-        idNew: this.listCardType.length + 1,
+        idNew: this.listEquipment.length + 1,
         isAddNew: true,
       },
     });
@@ -81,8 +80,8 @@ export class CardTypeComponent implements OnInit {
   }
   editItem(data, index) {
     const modal = this.modal.create({
-      nzTitle: "Cập nhật loại thẻ",
-      nzContent: AddEditCardTypeComponent,
+      nzTitle: "Cập nhật thông thin trang thiết bị",
+      nzContent: AddEditEquipmentComponent,
       nzClosable: false,
       nzFooter: "null",
       nzWidth: "35%",
@@ -90,7 +89,7 @@ export class CardTypeComponent implements OnInit {
         top: "10px",
       },
       nzComponentParams: {
-        CardTypeData: data,
+        EquipmentData: data,
       },
     });
     modal.afterClose.subscribe((rs: any) => {
@@ -99,7 +98,7 @@ export class CardTypeComponent implements OnInit {
       }
     });
   }
-
+  
   removeItem(id) {
     this.modal.confirm({
       nzTitle: "Bạn có chắc chắn muốn xóa không?",
@@ -108,21 +107,21 @@ export class CardTypeComponent implements OnInit {
       nzOkText: "Yes",
       nzOkType: "danger",
       nzOnOk: () => {
-        this.cardTypeService.deleteCardType(id).subscribe(
+        this.equipmentService.deleteEquipment(id).subscribe(
           (rs: any) => {
             if (rs === -1) {
-              this._message.error("Dữ liệu đang được sử dụng, không thể xóa");
+              this.message.error("Dữ liệu đang được sử dụng, không thể xóa");
               return;
             }
             if (rs > 0) {
-              this._message.success("Xóa thành công");
+              this.message.success("Xóa thành công");
               this.LoadData();
             } else {
-              this._message.error("Lỗi xóa dữ liệu");
+              this.message.error("Lỗi xóa dữ liệu");
             }
           },
           (_) => {
-            this._message.error("Error delete");
+            this.message.error("Error delete");
             console.log("Error delete");
           }
         );
@@ -131,12 +130,12 @@ export class CardTypeComponent implements OnInit {
       nzOnCancel: () => console.log("Cancel"),
     });
   }
-
+  
   search(colName: any) {
     this.displayData.ColName = colName;
     const arrCondition = [this.displayData.ColName];
-    this.listCardType = SearchEngine(
-      this.listCardTypeAll,
+    this.listEquipment = SearchEngine(
+      this.listEquipmentAll,
       arrCondition,
       this.displayData.KeywordCol
     );
@@ -153,5 +152,4 @@ export class CardTypeComponent implements OnInit {
       value: sortOrder,
     };
   }
-
 }

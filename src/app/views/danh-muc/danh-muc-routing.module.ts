@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { CardTypeComponent } from './card-type/card-type.component';
 import { EquipmentComponent } from './equipment/equipment.component';
 import { FacilityComponent } from './facility/facility.component';
+import { ServiceComponent } from './service/service.component';
 
 const routes: Routes = [
     {
@@ -20,7 +21,10 @@ const routes: Routes = [
         path: 'facility',
         component:FacilityComponent
     },
-    
+    {
+        path: 'service',
+        component:ServiceComponent
+    },
 ];
 
 @NgModule({

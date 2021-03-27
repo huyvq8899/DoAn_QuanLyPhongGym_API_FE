@@ -7,6 +7,8 @@ import { AddEditEquipmentComponent } from './equipment/add-edit-equipment/add-ed
 import { EquipmentComponent } from './equipment/equipment.component';
 import { AddEditFacilityComponent } from './facility/add-edit-facility/add-edit-facility/add-edit-facility.component';
 import { FacilityComponent } from './facility/facility.component';
+import { AddEditServiceComponent } from './service/add-edit-service/add-edit-service/add-edit-service.component';
+import { ServiceComponent } from './service/service.component';
 @NgModule({
   imports: [
  
@@ -16,7 +18,8 @@ import { FacilityComponent } from './facility/facility.component';
   declarations: [
     AddEditCardTypeComponent,CardTypeComponent,
     EquipmentComponent,AddEditEquipmentComponent,
-    FacilityComponent, AddEditFacilityComponent
+    FacilityComponent, AddEditFacilityComponent,
+    ServiceComponent,AddEditServiceComponent
 
 ]
 })
